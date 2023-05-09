@@ -1,0 +1,44 @@
+#define MAX_ENTRIES 100
+#define MAX_NAME_LEN 20 
+typedef struct {
+    char name[MAX_NAME_LEN]; 
+    int value; 
+} Entry;
+Entry symbol_table[MAX_ENTRIES]; 
+int num_entries = 0; 
+void insert_entry(char* name, int value) {
+    if (num_entries >= MAX_ENTRIES) {
+        printf("Error: Symbol table is full\n");
+        return;
+    }
+    for (int i = 0; i < num_entries; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            printf("Error: Symbol with same name already exists\n");
+            return;
+        }
+    }
+    Entry entry;
+    strncpy(entry.name, name, MAX_NAME_LEN);
+    entry.value = value;
+    symbol_table[num_entries++] = entry;
+    printf("Symbol '%s' inserted with value '%d'\n", name, value);
+}
+int lookup_symbol(char* name) {
+    for (int i = 0; i < num_entries; i++) {
+        if (strcmp(symbol_table[i].name, name) == 0) {
+            return symbol_table[i].value;
+        }
+    }
+    printf("Error: Symbol '%s' not found\n", name);
+    return -1;
+}
+int main() {
+    insert_entry("x", 10);
+    insert_entry("y", 20);
+    insert_entry("z", 30);
+    printf("Value of 'x': %d\n", lookup_symbol("x"));
+    printf("Value of 'y': %d\n", lookup_symbol("y"));
+    printf("Value of 'z': %d\n", lookup_symbol("z"));
+    printf("Value of 'a': %d\n", lookup_symbol("a"));
+    return 0;
+}
